@@ -95,3 +95,40 @@ func TestYearsUntilEvents(t *testing.T) {
 		})
 	}
 }
+
+func TestReformat(t *testing.T) {
+	tests := []struct {
+		message       string
+		formatter     func(string) string
+		formatterName string
+		expected      string
+	}{
+		{"hello", addExclamation, "addExclamation", "TEXTIO: hello!!!"},
+		{"hello there", addPeriod, "addPeriod", "TEXTIO: hello there..."},
+		{"moor der ehT", reverseString, "reverseString", "TEXTIO: The red room"},
+	}
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("message=%s,formatter=%s", test.message, test.formatterName), func(t *testing.T) {
+			result := Reformat(test.message, test.formatter)
+			if result != test.expected {
+				t.Errorf("Reformat(%q, %s) = %q; want %q", test.message, test.formatterName, result, test.expected)
+			}
+		})
+	}
+}
+
+func addPeriod(s string) string {
+	return s + "."
+}
+
+func addExclamation(s string) string {
+	return s + "!"
+}
+
+func reverseString(s string) string {
+	r := []rune(s)
+	for i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {
+		r[i], r[j] = r[j], r[i]
+	}
+	return string(r)
+}

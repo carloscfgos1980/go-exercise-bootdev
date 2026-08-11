@@ -81,3 +81,12 @@ func YearsUntilEvents2(age int) (yearsUntilAdult, yearsUntilDrinking, yearsUntil
 	}
 	return yearsUntilAdult, yearsUntilDrinking, yearsUntilCarRental
 }
+
+// functions as values
+func Reformat(message string, formatter func(string) string) string {
+	once := formatter(message)
+	twice := formatter(once)
+	thrice := formatter(twice)
+	prefix := "TEXTIO: "
+	return prefix + thrice
+}
