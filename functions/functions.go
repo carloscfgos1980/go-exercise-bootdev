@@ -1,5 +1,7 @@
 package functions
 
+import "fmt"
+
 // using unit testing to validate the functions
 func GetMonthlyPrice(tier string) int {
 	switch tier {
@@ -89,4 +91,23 @@ func Reformat(message string, formatter func(string) string) string {
 	thrice := formatter(twice)
 	prefix := "TEXTIO: "
 	return prefix + thrice
+}
+
+// Anonymous functions
+func PrintReports(intro, body, outro string) {
+	printCostReport(func(intro string) int {
+		return len(intro) * 2
+	}, intro)
+	printCostReport(func(body string) int {
+		return len(intro) * 3
+	}, body)
+	printCostReport(func(outro string) int {
+		return len(intro) * 4
+	}, outro)
+}
+
+func printCostReport(costCalculator func(string) int, message string) {
+	cost := costCalculator(message)
+	fmt.Printf(`Message: "%s" Cost: %v cents`, message, cost)
+	fmt.Println()
 }

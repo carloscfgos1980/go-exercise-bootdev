@@ -47,6 +47,12 @@ func main() {
 			fmt.Printf("Years until drinking: %d\n", yearsUntilDrinking)
 			fmt.Printf("Years until car rental: %d\n", yearsUntilCarRental)
 		},
+		"print-reports": func() {
+			intro := "Welcome to the monthly report"
+			body := "This month we had a 10% increase in sales"
+			outro := "Thank you for your business"
+			functions.PrintReports(intro, body, outro)
+		},
 	}
 
 	if len(os.Args) < 2 {
