@@ -20,6 +20,14 @@ func main() {
 			}
 			fmt.Println(functions.GetMonthlyPrice(os.Args[2]))
 		},
+		"monthly-bill-increase": func() {
+			costPerSendInt := 1000
+			numLastMonthInt := 10
+			numThisMonthInt := 15
+
+			result := functions.MonthlyBillIncrease(costPerSendInt, numLastMonthInt, numThisMonthInt)
+			fmt.Println(result)
+		},
 	}
 
 	if len(os.Args) < 2 {
