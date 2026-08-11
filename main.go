@@ -53,6 +53,7 @@ func main() {
 			outro := "Thank you for your business"
 			functions.PrintReports(intro, body, outro)
 		},
+		"bootup": functions.Bootup,
 	}
 
 	if len(os.Args) < 2 {

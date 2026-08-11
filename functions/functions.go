@@ -111,3 +111,41 @@ func printCostReport(costCalculator func(string) int, message string) {
 	fmt.Printf(`Message: "%s" Cost: %v cents`, message, cost)
 	fmt.Println()
 }
+
+// Defer statement
+func Bootup() {
+	defer fmt.Println("TEXTIO BOOTUP DONE")
+	ok := connectToDB()
+	if !ok {
+		return
+	}
+	ok = connectToPaymentProvider()
+	if !ok {
+		return
+	}
+	fmt.Println("All systems ready!")
+}
+
+var shouldConnectToDB = true
+
+func connectToDB() bool {
+	fmt.Println("Connecting to database...")
+	if shouldConnectToDB {
+		fmt.Println("Connected!")
+		return true
+	}
+	fmt.Println("Connection failed")
+	return false
+}
+
+var shouldConnectToPaymentProvider = true
+
+func connectToPaymentProvider() bool {
+	fmt.Println("Connecting to payment provider...")
+	if shouldConnectToPaymentProvider {
+		fmt.Println("Connected!")
+		return true
+	}
+	fmt.Println("Connection failed")
+	return false
+}
