@@ -28,6 +28,25 @@ func main() {
 			result := functions.MonthlyBillIncrease(costPerSendInt, numLastMonthInt, numThisMonthInt)
 			fmt.Println(result)
 		},
+		"product-message": func() {
+			if len(os.Args) < 3 {
+				fmt.Printf("usage: go run . product-message <tier>\n")
+				return
+			}
+			fmt.Println(functions.GetProductMessage(os.Args[2]))
+		},
+		"years-until-events": func() {
+			if len(os.Args) < 3 {
+				fmt.Printf("usage: go run . years-until-events <age>\n")
+				return
+			}
+			age := 0
+			fmt.Sscanf(os.Args[2], "%d", &age)
+			yearsUntilAdult, yearsUntilDrinking, yearsUntilCarRental := functions.YearsUntilEvents(age)
+			fmt.Printf("Years until adult: %d\n", yearsUntilAdult)
+			fmt.Printf("Years until drinking: %d\n", yearsUntilDrinking)
+			fmt.Printf("Years until car rental: %d\n", yearsUntilCarRental)
+		},
 	}
 
 	if len(os.Args) < 2 {

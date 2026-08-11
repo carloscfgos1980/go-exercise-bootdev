@@ -1,5 +1,6 @@
 package functions
 
+// using unit testing to validate the functions
 func GetMonthlyPrice(tier string) int {
 	switch tier {
 	case "basic":
@@ -13,6 +14,7 @@ func GetMonthlyPrice(tier string) int {
 	}
 }
 
+// Passing variable per value
 func MonthlyBillIncrease(costPerSend, numLastMonth, numThisMonth int) int {
 	var lastMonthBill int
 	var thisMonthBill int
@@ -23,4 +25,42 @@ func MonthlyBillIncrease(costPerSend, numLastMonth, numThisMonth int) int {
 
 func getBillForMonth(costPerSend, messagesSent int) int {
 	return costPerSend * messagesSent
+}
+
+// Ignoring return values
+func GetProductMessage(tier string) string {
+	quantityMsg, priceMsg, _ := getProductInfo(tier)
+	return "You get " + quantityMsg + " for " + priceMsg + "."
+}
+
+func getProductInfo(tier string) (string, string, string) {
+	switch tier {
+	case "basic":
+		return "1,000 texts per month", "$30 per month", "most popular"
+	case "premium":
+		return "50,000 texts per month", "$60 per month", "best value"
+	case "enterprise":
+		return "unlimited texts per month", "$100 per month", "customizable"
+	default:
+		return "", "", ""
+	}
+}
+
+// Named return values
+func YearsUntilEvents(age int) (yearsUntilAdult, yearsUntilDrinking, yearsUntilCarRental int) {
+	// don't touch below this line
+
+	yearsUntilAdult = 18 - age
+	if yearsUntilAdult < 0 {
+		yearsUntilAdult = 0
+	}
+	yearsUntilDrinking = 21 - age
+	if yearsUntilDrinking < 0 {
+		yearsUntilDrinking = 0
+	}
+	yearsUntilCarRental = 25 - age
+	if yearsUntilCarRental < 0 {
+		yearsUntilCarRental = 0
+	}
+	return
 }
