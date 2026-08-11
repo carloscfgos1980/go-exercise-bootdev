@@ -132,3 +132,24 @@ func reverseString(s string) string {
 	}
 	return string(r)
 }
+
+func TestSplitEmail(t *testing.T) {
+	tests := []struct {
+		email    string
+		username string
+		domain   string
+	}{
+		{"drogon@dragonstone.com", "drogon", "dragonstone.com"},
+		{"rhaenyra@targaryen.com", "rhaenyra", "targaryen.com"},
+		{"viserys@kingslanding.com", "viserys", "kingslanding.com"},
+		{"aegon@stormsend.com", "aegon", "stormsend.com"},
+	}
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("email=%s", test.email), func(t *testing.T) {
+			username, domain := SplitEmail(test.email)
+			if username != test.username || domain != test.domain {
+				t.Errorf("SplitEmail(%q) = (%q, %q); want (%q, %q)", test.email, username, domain, test.username, test.domain)
+			}
+		})
+	}
+}

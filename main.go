@@ -54,6 +54,16 @@ func main() {
 			functions.PrintReports(intro, body, outro)
 		},
 		"bootup": functions.Bootup,
+		"split-email": func() {
+			if len(os.Args) < 3 {
+				fmt.Printf("usage: go run . split-email <email>\n")
+				return
+			}
+			email := os.Args[2]
+			username, domain := functions.SplitEmail(email)
+			fmt.Printf("Username: %s\n", username)
+			fmt.Printf("Domain: %s\n", domain)
+		},
 	}
 
 	if len(os.Args) < 2 {
