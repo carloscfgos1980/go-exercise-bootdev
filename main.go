@@ -7,11 +7,19 @@ import (
 	"strings"
 
 	"github.com/carloscfgos1980/go-exercise-bootdev/condictionals"
+	"github.com/carloscfgos1980/go-exercise-bootdev/functions"
 )
 
 func main() {
 	commands := map[string]func(){
 		"calculate-balance": condictionals.CalculateBalance,
+		"monthly-price": func() {
+			if len(os.Args) < 3 {
+				fmt.Printf("usage: go run . monthly-price <tier>\n")
+				return
+			}
+			fmt.Println(functions.GetMonthlyPrice(os.Args[2]))
+		},
 	}
 
 	if len(os.Args) < 2 {
