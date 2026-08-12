@@ -89,6 +89,7 @@ func main() {
 			}
 			fmt.Printf("result slice: %v\n", resultslice)
 		},
+		"test-logger": functions.TestLogger,
 	}
 
 	if len(os.Args) < 2 {
