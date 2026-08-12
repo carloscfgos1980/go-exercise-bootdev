@@ -153,3 +153,27 @@ func TestSplitEmail(t *testing.T) {
 		})
 	}
 }
+
+func TestPlaceOrder(t *testing.T) {
+	tests := []struct {
+		productID      string
+		quantity       int
+		accountBalance float64
+		expected_1     bool
+		expected_2     float64
+	}{
+		{"1", 2, 226.95, true, 223.95},
+		{"2", 25, 459, true, 402.75},
+		{"3", 7, 1185.2, false, 1185.2},
+		{"4", 5, 0, false, 0},
+		{"5", 50, 195, true, 70},
+	}
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("productID=%s,quantity=%d,accountBalance=%.2f", test.productID, test.quantity, test.accountBalance), func(t *testing.T) {
+			result1, result2 := PlaceOrder(test.productID, test.quantity, test.accountBalance)
+			if result1 != test.expected_1 || result2 != test.expected_2 {
+				t.Errorf("PlaceOrder(%q, %d, %.2f) = (%v, %.2f); want (%v, %.2f)", test.productID, test.quantity, test.accountBalance, result1, result2, test.expected_1, test.expected_2)
+			}
+		})
+	}
+}

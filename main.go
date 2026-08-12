@@ -64,6 +64,20 @@ func main() {
 			fmt.Printf("Username: %s\n", username)
 			fmt.Printf("Domain: %s\n", domain)
 		},
+		"place-order": func() {
+			if len(os.Args) < 5 {
+				fmt.Printf("usage: go run . place-order <productID> <quantity> <accountBalance>\n")
+				return
+			}
+			productID := os.Args[2]
+			quantity := 0
+			accountBalance := 0.0
+			fmt.Sscanf(os.Args[3], "%d", &quantity)
+			fmt.Sscanf(os.Args[4], "%f", &accountBalance)
+			success, remainingBalance := functions.PlaceOrder(productID, quantity, accountBalance)
+			fmt.Printf("Success: %v\n", success)
+			fmt.Printf("Remaining balance: %.2f\n", remainingBalance)
+		},
 	}
 
 	if len(os.Args) < 2 {
