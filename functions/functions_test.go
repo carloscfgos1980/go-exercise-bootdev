@@ -177,3 +177,47 @@ func TestPlaceOrder(t *testing.T) {
 		})
 	}
 }
+
+func TestAdder(t *testing.T) {
+	tests := []struct {
+		input    []int
+		expected []int
+	}{
+		{
+			input:    []int{1, 2, 3},
+			expected: []int{1, 3, 6},
+		},
+		{
+			input:    []int{0, 0, 0, 0},
+			expected: []int{0, 0, 0, 0},
+		},
+		{
+			input:    []int{5, -3, -1},
+			expected: []int{5, 2, 1},
+		},
+	}
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("input=%v", test.input), func(t *testing.T) {
+			adder := Adder()
+			result := make([]int, len(test.input))
+			for i, v := range test.input {
+				result[i] = adder(v)
+			}
+			if !equalSlices(result, test.expected) {
+				t.Errorf("Adder(%v) = %v; want %v", test.input, result, test.expected)
+			}
+		})
+	}
+}
+
+func equalSlices(a, b []int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}

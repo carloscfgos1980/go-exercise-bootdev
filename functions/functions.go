@@ -164,7 +164,7 @@ func SplitEmail(email string) (string, string) {
 	return username, domain
 }
 
-// Processin orders
+// Processing orders
 func PlaceOrder(productID string, quantity int, accountBalance float64) (bool, float64) {
 	availableStock := amountInStock(productID)
 	if quantity > availableStock {
@@ -210,25 +210,35 @@ func priceList(productID string) float64 {
 }
 
 func amountInStock(productID string) int {
-	if productID == "1" {
+	switch productID {
+	case "1":
 		return 11
-	} else if productID == "2" {
+	case "2":
 		return 25
-	} else if productID == "3" {
+	case "3":
 		return 4
-	} else if productID == "4" {
+	case "4":
 		return 6
-	} else if productID == "5" {
+	case "5":
 		return 50
-	} else if productID == "6" {
+	case "6":
 		return 2
-	} else if productID == "7" {
+	case "7":
 		return 0
-	} else if productID == "8" {
+	case "8":
 		return 99
-	} else if productID == "9" {
+	case "9":
 		return 1
-	} else {
+	default:
 		return 0
+	}
+}
+
+// Closures
+func Adder() func(int) int {
+	sum := 0
+	return func(value int) int {
+		sum += value
+		return sum
 	}
 }

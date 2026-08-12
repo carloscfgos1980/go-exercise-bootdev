@@ -78,6 +78,17 @@ func main() {
 			fmt.Printf("Success: %v\n", success)
 			fmt.Printf("Remaining balance: %.2f\n", remainingBalance)
 		},
+		"adder": func() {
+
+			nums := []int{1, 3, 6, 10, 15}
+			resultslice := make([]int, len(nums))
+			adder := functions.Adder()
+			for i, num := range nums {
+				resultslice[i] = adder(num)
+				fmt.Printf("Adding %d, cumulative sum: %d\n", num, resultslice[i])
+			}
+			fmt.Printf("result slice: %v\n", resultslice)
+		},
 	}
 
 	if len(os.Args) < 2 {
