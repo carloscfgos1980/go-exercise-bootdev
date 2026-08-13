@@ -61,3 +61,33 @@ func TestGetBasicAuth(t *testing.T) {
 		}
 	}
 }
+
+func TestNewUser(t *testing.T) {
+	tests := []struct {
+		name           string
+		membershipType string
+	}{
+		{"Syl", "standard"},
+		{"Pattern", "premium"},
+		{"Pattern", "standard"},
+		{"Renarin", "standard"},
+		{"Lift", "premium"},
+		{"Dalinar", "standard"},
+	}
+	for _, test := range tests {
+		user := NewUser(test.name, test.membershipType)
+		fmt.Printf("Testing user %+v, got membership %+v\n", user, user.Membership)
+		if user.Name != test.name {
+			t.Errorf("For name %s, expected %s, got %s", test.name, test.name, user.Name)
+		}
+		if user.Membership.Type != test.membershipType {
+			t.Errorf("For membership type %s, expected %s, got %s", test.membershipType, test.membershipType, user.Membership.Type)
+		}
+		if test.membershipType == "premium" && user.Membership.MessageCharLimit != 1000 {
+			t.Errorf("For premium membership, expected char limit 1000, got %d", user.Membership.MessageCharLimit)
+		}
+		if test.membershipType != "premium" && user.Membership.MessageCharLimit != 100 {
+			t.Errorf("For non-premium membership, expected char limit 100, got %d", user.Membership.MessageCharLimit)
+		}
+	}
+}

@@ -111,6 +111,16 @@ func main() {
 			}
 
 		},
+		"new-user": func() {
+			if len(os.Args) < 4 {
+				fmt.Printf("usage: go run . new-user <name> <membershipType>\n")
+				return
+			}
+			name := os.Args[2]
+			membershipType := os.Args[3]
+			user := structs.NewUser(name, membershipType)
+			fmt.Printf("Created user: %+v\n", user)
+		},
 	}
 
 	if len(os.Args) < 2 {
