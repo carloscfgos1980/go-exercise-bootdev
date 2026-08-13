@@ -91,3 +91,25 @@ func TestNewUser(t *testing.T) {
 		}
 	}
 }
+
+func TestSendMessage(t *testing.T) {
+	tests := []struct {
+		name           string
+		membershipType string
+		message        string
+		expectResult   string
+		expectSuccess  bool
+	}{
+		{"Syl", "standard", "Hello, Kaladin!", "Hello, Kaladin!", true},
+		{"Pattern", "premium", "You are not as good with patterns... You are abstract. You think in lies and tell them to yourselves. That is fascinating, but it is not good for patterns.", "You are not as good with patterns... You are abstract. You think in lies and tell them to yourselves. That is fascinating, but it is not good for patterns.", true},
+		{"Dalinar", "standard", "I will take responsibility for what I have done. If I must fall, I will rise each time a better man.", "I will take responsibility for what I have done. If I must fall, I will rise each time a better man.", true},
+		{"Pattern", "standard", "Humans can see the world as it is not. It is why your lies can be so strong. You are able to not admit that they are lies.", "", false},
+	}
+	for _, test := range tests {
+		user := NewUser(test.name, test.membershipType)
+		result, success := user.SendMessage(test.message, len(test.message))
+		if result != test.expectResult || success != test.expectSuccess {
+			t.Errorf("For user %+v, message %q, expected result %q and success %v, got result %q and success %v", user, test.message, test.expectResult, test.expectSuccess, result, success)
+		}
+	}
+}

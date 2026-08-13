@@ -121,6 +121,17 @@ func main() {
 			user := structs.NewUser(name, membershipType)
 			fmt.Printf("Created user: %+v\n", user)
 		},
+		"send-user-message": func() {
+			user := structs.NewUser("Charlie", "standard")
+			message := "This is a test message."
+			messageLength := len(message)
+			sentMessage, success := user.SendMessage(message, messageLength)
+			if success {
+				fmt.Printf("Message sent: %s\n", sentMessage)
+			} else {
+				fmt.Println("Message not sent. Exceeds character limit.")
+			}
+		},
 	}
 
 	if len(os.Args) < 2 {

@@ -44,20 +44,19 @@ type Membership struct {
 }
 
 func NewUser(name string, membershipType string) User1 {
+	membership := Membership{Type: membershipType}
 	if membershipType == "premium" {
-		return User1{
-			Name: name,
-			Membership: Membership{
-				Type:             membershipType,
-				MessageCharLimit: 1000,
-			},
-		}
+		membership.MessageCharLimit = 1000
+	} else {
+		membership.MessageCharLimit = 100
 	}
-	return User1{
-		Name: name,
-		Membership: Membership{
-			Type:             membershipType,
-			MessageCharLimit: 100,
-		},
+	return User1{Name: name, Membership: membership}
+}
+
+// Send Message
+func (u User1) SendMessage(message string, messageLength int) (string, bool) {
+	if messageLength <= u.MessageCharLimit {
+		return message, true
 	}
+	return "", false
 }
