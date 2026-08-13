@@ -21,3 +21,13 @@ func CanSendMessage(mToSend MessageToSend) bool {
 	}
 	return true
 }
+
+// Structs methods
+type authenticationInfo struct {
+	username string
+	password string
+}
+
+func (auth authenticationInfo) GetBasicAuth() string {
+	return "Authorization: Basic " + auth.username + ":" + auth.password
+}
