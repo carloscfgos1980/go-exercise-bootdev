@@ -8,6 +8,7 @@ import (
 
 	"github.com/carloscfgos1980/go-exercise-bootdev/condictionals"
 	"github.com/carloscfgos1980/go-exercise-bootdev/functions"
+	"github.com/carloscfgos1980/go-exercise-bootdev/structs"
 )
 
 func main() {
@@ -90,6 +91,26 @@ func main() {
 			fmt.Printf("result slice: %v\n", resultslice)
 		},
 		"test-logger": functions.TestLogger,
+		"send-message": func() {
+			message := structs.MessageToSend{
+				Message: "Hello, how are you?",
+				Sender: structs.User{
+					Name:   "Alice",
+					Number: 1234567890,
+				},
+				Recipient: structs.User{
+					Name:   "Bob",
+					Number: 9876543210,
+				},
+			}
+			canSend := structs.CanSendMessage(message)
+			if canSend {
+				fmt.Println("Message can be sent.")
+			} else {
+				fmt.Println("Message cannot be sent.")
+			}
+
+		},
 	}
 
 	if len(os.Args) < 2 {
