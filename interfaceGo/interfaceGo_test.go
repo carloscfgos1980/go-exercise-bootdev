@@ -237,3 +237,34 @@ func TestSendMessage2(t *testing.T) {
 		}
 	}
 }
+
+func TestProcessNotification(t *testing.T) {
+	tests := []struct {
+		notification       notification
+		expectedID         string
+		expectedImportance int
+	}{
+		{
+			directMessage{senderUsername: "Kaladin", messageContent: "Life before death", priorityLevel: 10, isUrgent: true},
+			"Kaladin",
+			50,
+		},
+		{
+			groupMessage{groupName: "Bridge 4", messageContent: "Soups ready!", priorityLevel: 2},
+			"Bridge 4",
+			2,
+		},
+		{
+			systemAlert{alertCode: "ALERT001", messageContent: "THIS IS NOT A TEST HIGH STORM COMING SOON"},
+			"ALERT001",
+			100,
+		},
+	}
+	for _, test := range tests {
+		resultID, resultImportance := ProcessNotification(test.notification)
+		fmt.Printf("Testing notification %+v, got ID %q and importance %d\n", test.notification, resultID, resultImportance)
+		if resultID != test.expectedID || resultImportance != test.expectedImportance {
+			t.Errorf("For notification %+v, expected ID %q and importance %d, got ID %q and importance %d", test.notification, test.expectedID, test.expectedImportance, resultID, resultImportance)
+		}
+	}
+}

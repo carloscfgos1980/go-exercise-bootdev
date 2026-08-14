@@ -198,3 +198,54 @@ func (c code) format() string {
 func SendMessage2(format formatter) string {
 	return format.format() // Adjusted to call Format without an argument
 }
+
+// Process notifications
+type notification interface {
+	importance() int
+}
+
+type directMessage struct {
+	senderUsername string
+	messageContent string
+	priorityLevel  int
+	isUrgent       bool
+}
+
+func (dm directMessage) importance() int {
+	if dm.isUrgent {
+		return 50
+	}
+	return dm.priorityLevel
+}
+
+type groupMessage struct {
+	groupName      string
+	messageContent string
+	priorityLevel  int
+}
+
+func (gm groupMessage) importance() int {
+	return gm.priorityLevel
+}
+
+type systemAlert struct {
+	alertCode      string
+	messageContent string
+}
+
+func (sa systemAlert) importance() int {
+	return 100
+}
+
+func ProcessNotification(n notification) (string, int) {
+	switch notif := n.(type) {
+	case directMessage:
+		return notif.senderUsername, notif.importance()
+	case groupMessage:
+		return notif.groupName, notif.importance()
+	case systemAlert:
+		return notif.alertCode, notif.importance()
+	default:
+		return "", 0
+	}
+}
