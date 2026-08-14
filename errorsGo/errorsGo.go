@@ -1,6 +1,7 @@
 package errorsgo
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -43,7 +44,15 @@ func (de divideError) Error() string {
 
 func Divide(dividend, divisor float64) (float64, error) {
 	if divisor == 0 {
-		return 0, divideError{dividend: dividend}
+		return 0.0, divideError{dividend: dividend}
 	}
 	return dividend / divisor, nil
+}
+
+// Errors package
+func Divide2(x, y float64) (float64, error) {
+	if y == 0 {
+		return 0.0, errors.New("no dividing by 0")
+	}
+	return x / y, nil
 }

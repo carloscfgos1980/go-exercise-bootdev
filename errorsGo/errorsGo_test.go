@@ -65,3 +65,22 @@ func TestDivide(t *testing.T) {
 		}
 	}
 }
+
+func TestDivide2(t *testing.T) {
+	tests := []struct {
+		x, y, expected float64
+		expectedErr    string
+	}{
+		{10, 0, 0, "no dividing by 0"},
+		{10, 2, 5, ""},
+		{15, 30, 0.5, ""},
+		{6, 3, 2, ""},
+	}
+	for _, tt := range tests {
+		result, err := Divide2(tt.x, tt.y)
+		fmt.Printf("Testing Divide2(%v, %v), got result %v and error %v\n", tt.x, tt.y, result, err)
+		if result != tt.expected || (err != nil && err.Error() != tt.expectedErr) {
+			t.Errorf("Divide2(%v, %v) = %v, %v; want %v, %v", tt.x, tt.y, result, err, tt.expected, tt.expectedErr)
+		}
+	}
+}
