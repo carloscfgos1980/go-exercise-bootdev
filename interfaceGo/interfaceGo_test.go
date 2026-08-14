@@ -219,3 +219,21 @@ func TestGetExpenseReport2(t *testing.T) {
 		}
 	}
 }
+
+func TestSendMessage2(t *testing.T) {
+	tests := []struct {
+		format   formatter
+		expected string
+	}{
+		{plainText{message: "Hello, World!"}, "Hello, World!"},
+		{bold{message: "Bold Message"}, "**Bold Message**"},
+		{code{message: "Code Message"}, "`Code Message`"},
+	}
+	for _, test := range tests {
+		result := SendMessage2(test.format)
+		fmt.Printf("Testing format %+v, got %q\n", test.format, result)
+		if result != test.expected {
+			t.Errorf("For format %+v, expected %q, got %q", test.format, test.expected, result)
+		}
+	}
+}

@@ -165,3 +165,36 @@ func GetExpenseReport2(e expense) (string, float64) {
 		return "", 0.0
 	}
 }
+
+// Message formatters
+type formatter interface {
+	format() string
+}
+
+type plainText struct {
+	message string
+}
+
+func (p plainText) format() string {
+	return p.message
+}
+
+type bold struct {
+	message string
+}
+
+func (b bold) format() string {
+	return "**" + b.message + "**"
+}
+
+type code struct {
+	message string
+}
+
+func (c code) format() string {
+	return "`" + c.message + "`"
+}
+
+func SendMessage2(format formatter) string {
+	return format.format() // Adjusted to call Format without an argument
+}
