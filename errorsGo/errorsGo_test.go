@@ -1,6 +1,7 @@
 package errorsgo
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 )
@@ -81,6 +82,24 @@ func TestDivide2(t *testing.T) {
 		fmt.Printf("Testing Divide2(%v, %v), got result %v and error %v\n", tt.x, tt.y, result, err)
 		if result != tt.expected || (err != nil && err.Error() != tt.expectedErr) {
 			t.Errorf("Divide2(%v, %v) = %v, %v; want %v, %v", tt.x, tt.y, result, err, tt.expected, tt.expectedErr)
+		}
+	}
+}
+
+func TestValidStatus(t *testing.T) {
+	tests := []struct {
+		status      string
+		expectedErr error
+	}{
+		{"", errors.New("status cannot be empty")},
+		{"This is a valid status update that is well within the character limit.", nil},
+		{"This status update is way too long. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.", errors.New("status exceeds 140 characters")},
+	}
+	for _, tt := range tests {
+		err := ValidateStatus(tt.status)
+		fmt.Printf("Testing ValidateStatus(%q), got error %v\n", tt.status, err)
+		if (err != nil && tt.expectedErr == nil) || (err == nil && tt.expectedErr != nil) || (err != nil && tt.expectedErr != nil && err.Error() != tt.expectedErr.Error()) {
+			t.Errorf("ValidateStatus(%q) = %v; want %v", tt.status, err, tt.expectedErr)
 		}
 	}
 }

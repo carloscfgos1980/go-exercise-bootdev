@@ -56,3 +56,14 @@ func Divide2(x, y float64) (float64, error) {
 	}
 	return x / y, nil
 }
+
+// User input validation
+func ValidateStatus(status string) error {
+	if status == "" {
+		return errors.New("status cannot be empty")
+	}
+	if len(status) > 140 {
+		return errors.New("status exceeds 140 characters")
+	}
+	return nil
+}
