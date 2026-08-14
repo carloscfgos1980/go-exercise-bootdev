@@ -26,3 +26,23 @@ func TestSendSMSToCouple(t *testing.T) {
 		}
 	}
 }
+
+func TestGetSMSErrorString(t *testing.T) {
+	tests := []struct {
+		cost      float64
+		recipient string
+		expected  string
+	}{
+		{1.4, "+1 (435) 555 0923", "SMS that costs $1.40 to be sent to '+1 (435) 555 0923' cannot be sent"},
+		{2.1, "+2 (702) 555 3452", "SMS that costs $2.10 to be sent to '+2 (702) 555 3452' cannot be sent"},
+		{32.1, "+1 (801) 555 7456", "SMS that costs $32.10 to be sent to '+1 (801) 555 7456' cannot be sent"},
+		{14.4, "+1 (234) 555 6545", "SMS that costs $14.40 to be sent to '+1 (234) 555 6545' cannot be sent"},
+	}
+	for _, tt := range tests {
+		result := GetSMSErrorString(tt.cost, tt.recipient)
+		fmt.Printf("Testing GetSMSErrorString(%.2f, %q), got result %q\n", tt.cost, tt.recipient, result)
+		if result != tt.expected {
+			t.Errorf("GetSMSErrorString(%.2f, %q) = %q; want %q", tt.cost, tt.recipient, result, tt.expected)
+		}
+	}
+}

@@ -27,3 +27,8 @@ func sendSMS(message string) (int, error) {
 	}
 	return costPerChar * len(message), nil
 }
+
+// Formating Strings Review
+func GetSMSErrorString(cost float64, recipient string) string {
+	return fmt.Sprintf("SMS that costs $%.2f to be sent to '%s' cannot be sent", cost, recipient)
+}
