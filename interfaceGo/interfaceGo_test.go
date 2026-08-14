@@ -89,3 +89,68 @@ func TestSendMessage1(t *testing.T) {
 		}
 	}
 }
+
+func TestGetExpenseReport(t *testing.T) {
+	tests := []struct {
+		exp          expense
+		expectedText string
+		expectedCost float64
+	}{
+		{
+			email{
+				isSubscribed: true,
+				body:         "Whoa there!",
+				toAddress:    "soldier@monty.com"},
+			"soldier@monty.com",
+			0.11,
+		},
+		{
+			sms{
+				isSubscribed:  false,
+				body:          "Halt! Who goes there?",
+				toPhoneNumber: "+155555509832",
+			},
+			"+155555509832",
+			2.1,
+		},
+		{
+			email{
+				isSubscribed: false,
+				body:         "It is I, Arthur, son of Uther Pendragon, from the castle of Camelot. King of the Britons, defeator of the Saxons, sovereign of all England!",
+				toAddress:    "soldier@monty.com",
+			},
+			"soldier@monty.com",
+			6.95,
+		},
+		{
+			email{
+				isSubscribed: true,
+				body:         "Pull the other one!",
+				toAddress:    "arthur@monty.com",
+			},
+			"arthur@monty.com",
+			0.19,
+		},
+		{
+			sms{
+				isSubscribed:  true,
+				body:          "I am. And this my trusty servant Patsy.",
+				toPhoneNumber: "+155555509832",
+			},
+			"+155555509832",
+			1.17,
+		},
+		{
+			invalid{},
+			"",
+			0.0,
+		},
+	}
+	for _, test := range tests {
+		resultText, resultCost := GetExpenseReport(test.exp)
+		fmt.Printf("Testing expense %+v, got text %q and cost %f\n", test.exp, resultText, resultCost)
+		if resultText != test.expectedText || resultCost != test.expectedCost {
+			t.Errorf("For expense %+v, expected text %q and cost %f, got text %q and cost %f", test.exp, test.expectedText, test.expectedCost, resultText, resultCost)
+		}
+	}
+}
