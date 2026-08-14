@@ -41,3 +41,22 @@ func TestSendMessage(t *testing.T) {
 		}
 	}
 }
+
+func TestGetEmployeeSalary(t *testing.T) {
+	tests := []struct {
+		emp            employee
+		expectedSalary int
+	}{
+		{emp: fullTime{name: "Bob", salary: 7300}, expectedSalary: 7300},
+		{emp: contractor{name: "Jill", hourlyPay: 872, hoursPerYear: 982}, expectedSalary: 856304},
+		{emp: fullTime{name: "Alice", salary: 10000}, expectedSalary: 10000},
+		{emp: contractor{name: "John", hourlyPay: 1000, hoursPerYear: 1000}, expectedSalary: 1000000},
+	}
+	for _, test := range tests {
+		resultSalary := GetEmployeeSalary(test.emp)
+		fmt.Printf("Testing employee %+v, got salary %d\n", test.emp, resultSalary)
+		if resultSalary != test.expectedSalary {
+			t.Errorf("For employee %+v, expected salary %d, got %d", test.emp, test.expectedSalary, resultSalary)
+		}
+	}
+}

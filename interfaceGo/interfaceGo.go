@@ -33,3 +33,40 @@ type sendingReport struct {
 func (sr sendingReport) getMessage() string {
 	return fmt.Sprintf(`Your "%s" report is ready. You've sent %v messages.`, sr.reportName, sr.numberOfSends)
 }
+
+// Interface implementation
+func GetEmployeeSalary(e employee) int {
+	return e.getSalary()
+}
+
+type employee interface {
+	getName() string
+	getSalary() int
+}
+
+type contractor struct {
+	name         string
+	hourlyPay    int
+	hoursPerYear int
+}
+
+func (c contractor) getName() string {
+	return c.name
+}
+
+func (c contractor) getSalary() int {
+	return c.hoursPerYear * c.hourlyPay
+}
+
+type fullTime struct {
+	name   string
+	salary int
+}
+
+func (ft fullTime) getSalary() int {
+	return ft.salary
+}
+
+func (ft fullTime) getName() string {
+	return ft.name
+}
