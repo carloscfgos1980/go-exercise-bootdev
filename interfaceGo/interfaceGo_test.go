@@ -60,3 +60,32 @@ func TestGetEmployeeSalary(t *testing.T) {
 		}
 	}
 }
+
+func TestSendMessage1(t *testing.T) {
+	tests := []struct {
+		exp          expense1
+		format       formatter1
+		expectedText string
+		expectedCost int
+	}{
+		{
+			exp:          email1{isSubscribed: true, body: "Hello"},
+			format:       email1{isSubscribed: true, body: "Hello"},
+			expectedText: "'Hello' | Subscribed",
+			expectedCost: 10,
+		},
+		{
+			exp:          email1{isSubscribed: false, body: "Hello"},
+			format:       email1{isSubscribed: false, body: "Hello"},
+			expectedText: "'Hello' | Not Subscribed",
+			expectedCost: 25,
+		},
+	}
+	for _, test := range tests {
+		resultText, resultCost := SendMessage1(test.exp, test.format)
+		fmt.Printf("Testing expense %+v, got text %q and cost %d\n", test.exp, resultText, resultCost)
+		if resultText != test.expectedText || resultCost != test.expectedCost {
+			t.Errorf("For expense %+v, expected text %q and cost %d, got text %q and cost %d", test.exp, test.expectedText, test.expectedCost, resultText, resultCost)
+		}
+	}
+}

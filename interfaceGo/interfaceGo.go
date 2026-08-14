@@ -70,3 +70,37 @@ func (ft fullTime) getSalary() int {
 func (ft fullTime) getName() string {
 	return ft.name
 }
+
+// Multiples interface
+func SendMessage1(e expense1, f formatter1) (string, int) {
+	return f.format(), e.cost()
+}
+
+func (e email1) cost() int {
+	if !e.isSubscribed {
+		return len(e.body) * 5
+	}
+	return len(e.body) * 2
+
+}
+
+func (e email1) format() string {
+	subscribedText := "Subscribed"
+	if !e.isSubscribed {
+		subscribedText = "Not Subscribed"
+	}
+	return fmt.Sprintf("'%s' | %s", e.body, subscribedText)
+}
+
+type expense1 interface {
+	cost() int
+}
+
+type formatter1 interface {
+	format() string
+}
+
+type email1 struct {
+	isSubscribed bool
+	body         string
+}
