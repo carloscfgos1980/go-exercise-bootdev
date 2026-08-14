@@ -153,3 +153,15 @@ func (sm sms) cost() float64 {
 func (inv invalid) cost() float64 {
 	return 0.0
 }
+
+// Type Switches
+func GetExpenseReport2(e expense) (string, float64) {
+	switch v := e.(type) {
+	case email:
+		return v.toAddress, v.cost()
+	case sms:
+		return v.toPhoneNumber, v.cost()
+	default:
+		return "", 0.0
+	}
+}
