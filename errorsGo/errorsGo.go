@@ -17,8 +17,6 @@ func SendSMSToCouple(msgToCustomer, msgToSpouse string) (int, error) {
 	return costMsgCostumer + costMsgSpouse, nil
 }
 
-// don't edit below this line
-
 func sendSMS(message string) (int, error) {
 	const maxTextLen = 25
 	const costPerChar = 2
@@ -31,4 +29,21 @@ func sendSMS(message string) (int, error) {
 // Formating Strings Review
 func GetSMSErrorString(cost float64, recipient string) string {
 	return fmt.Sprintf("SMS that costs $%.2f to be sent to '%s' cannot be sent", cost, recipient)
+}
+
+// Custom error type
+
+type divideError struct {
+	dividend float64
+}
+
+func (de divideError) Error() string {
+	return fmt.Sprintf("cannot divide %v by zero", de.dividend)
+}
+
+func Divide(dividend, divisor float64) (float64, error) {
+	if divisor == 0 {
+		return 0, divideError{dividend: dividend}
+	}
+	return dividend / divisor, nil
 }

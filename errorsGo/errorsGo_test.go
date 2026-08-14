@@ -46,3 +46,22 @@ func TestGetSMSErrorString(t *testing.T) {
 		}
 	}
 }
+
+func TestDivide(t *testing.T) {
+	tests := []struct {
+		dividend, divisor, expected float64
+		expectedError               string
+	}{
+		{10, 2, 5, ""},
+		{15, 3, 5, ""},
+		{10, 0, 0, "cannot divide 10 by zero"},
+		{15, 0, 0, "cannot divide 15 by zero"},
+	}
+	for _, tt := range tests {
+		result, err := Divide(tt.dividend, tt.divisor)
+		fmt.Printf("Testing Divide(%v, %v), got result %v and error %v\n", tt.dividend, tt.divisor, result, err)
+		if result != tt.expected || (err != nil && err.Error() != tt.expectedError) {
+			t.Errorf("Divide(%v, %v) = %v, %v; want %v, %v", tt.dividend, tt.divisor, result, err, tt.expected, tt.expectedError)
+		}
+	}
+}
