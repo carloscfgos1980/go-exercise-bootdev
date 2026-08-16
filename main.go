@@ -8,6 +8,7 @@ import (
 
 	"github.com/carloscfgos1980/go-exercise-bootdev/condictionals"
 	"github.com/carloscfgos1980/go-exercise-bootdev/functions"
+	"github.com/carloscfgos1980/go-exercise-bootdev/loopsGo"
 	"github.com/carloscfgos1980/go-exercise-bootdev/structs"
 )
 
@@ -132,6 +133,7 @@ func main() {
 				fmt.Println("Message not sent. Exceeds character limit.")
 			}
 		},
+		"fizzbuzz": loopsGo.Fizzbuzz,
 	}
 
 	if len(os.Args) < 2 {
