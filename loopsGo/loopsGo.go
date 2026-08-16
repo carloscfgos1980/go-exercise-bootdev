@@ -67,3 +67,12 @@ func PrintPrimes(max int) {
 		}
 	}
 }
+
+// Count conexions
+func CountConnections(groupSize int) int {
+	num := 0
+	for i := 0; i < groupSize; i++ {
+		num += i
+	}
+	return num
+}

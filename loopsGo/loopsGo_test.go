@@ -50,3 +50,26 @@ func TestGetMaxMessagesToSend(t *testing.T) {
 		}
 	}
 }
+
+func TestCountConnections(t *testing.T) {
+	tests := []struct {
+		groupSize int
+		expected  int
+	}{
+		{1, 0},
+		{2, 1},
+		{3, 3},
+		{4, 6},
+		{0, 0},
+		{10, 45},
+		{100, 4950},
+		{1000, 499500},
+	}
+	for _, tt := range tests {
+		result := CountConnections(tt.groupSize)
+		fmt.Printf("CountConnections(%v) = %v; want %v\n", tt.groupSize, result, tt.expected)
+		if result != tt.expected {
+			t.Errorf("CountConnections(%v) = %v; want %v", tt.groupSize, result, tt.expected)
+		}
+	}
+}
