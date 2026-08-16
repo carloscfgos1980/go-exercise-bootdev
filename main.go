@@ -134,6 +134,15 @@ func main() {
 			}
 		},
 		"fizzbuzz": loopsGo.Fizzbuzz,
+		"print-primes": func() {
+			if len(os.Args) < 3 {
+				fmt.Printf("usage: go run . print-primes <max>\n")
+				return
+			}
+			max := 0
+			fmt.Sscanf(os.Args[2], "%d", &max)
+			loopsGo.PrintPrimes(max)
+		},
 	}
 
 	if len(os.Args) < 2 {
