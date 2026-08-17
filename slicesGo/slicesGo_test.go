@@ -38,3 +38,77 @@ func TestGetMessageWithRetries(t *testing.T) {
 		}
 	}
 }
+
+func TestGetMessageWithRetriesForPlan(t *testing.T) {
+	tests := []struct {
+		plan             string
+		messages         [3]string
+		expectedMessages []string
+		expectedErr      error
+	}{
+		{
+			planFree,
+			[3]string{
+				"Hello sir/madam can I interest you in a yacht?",
+				"Please I'll even give you an Amazon gift card?",
+				"You're missing out big time",
+			},
+			[]string{"Hello sir/madam can I interest you in a yacht?", "Please I'll even give you an Amazon gift card?"},
+			nil,
+		},
+		{
+			planPro,
+			[3]string{
+				"Hello sir/madam can I interest you in a yacht?",
+				"Please I'll even give you an Amazon gift card?",
+				"You're missing out big time",
+			},
+			[]string{
+				"Hello sir/madam can I interest you in a yacht?",
+				"Please I'll even give you an Amazon gift card?",
+				"You're missing out big time",
+			},
+			nil,
+		},
+		{
+			"invalid plan",
+			[3]string{
+				"You can get a good look at a T-bone by sticking your head up a bull's ass, but wouldn't you rather take the butcher's word for it?",
+				"Wouldn't you?",
+				"Wouldn't you???",
+			},
+			nil,
+			fmt.Errorf("unsupported plan"),
+		},
+	}
+	for _, tt := range tests {
+		resultMessages, resultErr := GetMessageWithRetriesForPlan(tt.plan, tt.messages)
+		fmt.Printf("GetMessageWithRetriesForPlan(%v, %v) = %v, %v; want %v, %v\n", tt.plan, tt.messages, resultMessages, resultErr, tt.expectedMessages, tt.expectedErr)
+		if !equalSlices(resultMessages, tt.expectedMessages) || !equalErrors(resultErr, tt.expectedErr) {
+			t.Errorf("GetMessageWithRetriesForPlan(%v, %v) = %v, %v; want %v, %v", tt.plan, tt.messages, resultMessages, resultErr, tt.expectedMessages, tt.expectedErr)
+		}
+	}
+
+}
+
+func equalSlices(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func equalErrors(a, b error) bool {
+	if a == nil && b == nil {
+		return true
+	}
+	if a == nil || b == nil {
+		return false
+	}
+	return a.Error() == b.Error()
+}
