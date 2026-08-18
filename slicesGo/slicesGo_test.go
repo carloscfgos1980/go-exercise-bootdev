@@ -196,3 +196,24 @@ func TestGetDayCosts(t *testing.T) {
 		}
 	}
 }
+
+func TestIndexOfFirstBadWord(t *testing.T) {
+	tests := []struct {
+		msg      []string
+		badWords []string
+		expected int
+	}{
+		{[]string{"hey", "there", "john"}, []string{"crap", "shoot", "frick", "dang"}, -1},
+		{[]string{"ugh", "oh", "my", "frick"}, []string{"crap", "shoot", "frick", "dang"}, 3},
+		{[]string{"what", "the", "shoot", "I", "hate", "that", "crap"}, []string{"crap", "shoot", "frick", "dang"}, 2},
+		{[]string{"crap", "shoot", "frick", "dang"}, []string{""}, -1},
+		{[]string{""}, nil, -1},
+	}
+	for _, tt := range tests {
+		result := IndexOfFirstBadWord(tt.msg, tt.badWords)
+		fmt.Printf("IndexOfFirstBadWord(%v, %v) = %v; want %v\n", tt.msg, tt.badWords, result, tt.expected)
+		if result != tt.expected {
+			t.Errorf("IndexOfFirstBadWord(%v, %v) = %v; want %v", tt.msg, tt.badWords, result, tt.expected)
+		}
+	}
+}
