@@ -162,3 +162,37 @@ func TestSum(t *testing.T) {
 		}
 	}
 }
+
+func TestGetDayCosts(t *testing.T) {
+	tests := []struct {
+		costs    []cost
+		day      int
+		expected []float64
+	}{
+		{
+			costs: []cost{
+				{0, 1.0},
+				{1, 2.0},
+				{1, 3.1},
+				{5, 2.5},
+				{2, 3.6},
+				{1, 2.7},
+				{1, 3.3},
+			},
+			day: 1,
+			expected: []float64{
+				2.0,
+				3.1,
+				2.7,
+				3.3,
+			},
+		},
+	}
+	for _, tt := range tests {
+		result := GetDayCosts(tt.costs, tt.day)
+		fmt.Printf("GetDayCosts(%v, %v) = %v; want %v\n", tt.costs, tt.day, result, tt.expected)
+		if !equalSlices(result, tt.expected) {
+			t.Errorf("GetDayCosts(%v, %v) = %v; want %v", tt.costs, tt.day, result, tt.expected)
+		}
+	}
+}
