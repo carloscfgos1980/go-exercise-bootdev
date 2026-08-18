@@ -25,3 +25,12 @@ func GetMessageWithRetriesForPlan(plan string, messages [3]string) ([]string, er
 	return nil, errors.New("unsupported plan")
 
 }
+
+// Make
+func GetMessageCosts(messages []string) []float64 {
+	cost := make([]float64, len(messages))
+	for i := 0; i < len(messages); i++ {
+		cost[i] = float64(len(messages[i])) * 0.01
+	}
+	return cost
+}

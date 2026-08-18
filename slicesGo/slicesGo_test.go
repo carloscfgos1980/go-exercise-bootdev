@@ -91,7 +91,7 @@ func TestGetMessageWithRetriesForPlan(t *testing.T) {
 
 }
 
-func equalSlices(a, b []string) bool {
+func equalSlices[T comparable](a, b []T) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -111,4 +111,34 @@ func equalErrors(a, b error) bool {
 		return false
 	}
 	return a.Error() == b.Error()
+}
+
+func TestGetMessageCosts(t *testing.T) {
+	tests := []struct {
+		messages    []string
+		expected    []float64
+		expectedCap int
+	}{
+		{
+			[]string{"Welcome to the movies!", "Enjoy your popcorn!"},
+			[]float64{0.22, 0.19},
+			2,
+		},
+		{
+			[]string{"I don't want to be here anymore", "Can we go home?", "I'm hungry", "I'm bored"},
+			[]float64{0.31, 0.15, 0.1, 0.09},
+			4,
+		},
+		{[]string{}, []float64{}, 0},
+		{[]string{""}, []float64{0}, 1},
+		{[]string{"Hello", "Hi", "Hey"}, []float64{0.05, 0.02, 0.03}, 3},
+	}
+	for _, tt := range tests {
+		cost := GetMessageCosts(tt.messages)
+		fmt.Printf("GetMessageCosts(%v) = %v; want %v; want capacity = %v, got %v\n", tt.messages, cost, tt.expected, tt.expectedCap, cap(cost))
+		if !equalSlices(tt.expected, cost) || cap(cost) != tt.expectedCap {
+			t.Errorf("GetMessageCosts(%v) = %v; want %v; cap = %v; want cap = %v", tt.messages, cost, tt.expected, cap(cost), tt.expectedCap)
+		}
+	}
+
 }
