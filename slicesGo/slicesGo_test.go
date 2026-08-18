@@ -140,5 +140,25 @@ func TestGetMessageCosts(t *testing.T) {
 			t.Errorf("GetMessageCosts(%v) = %v; want %v; cap = %v; want cap = %v", tt.messages, cost, tt.expected, cap(cost), tt.expectedCap)
 		}
 	}
+}
 
+func TestSum(t *testing.T) {
+	tests := []struct {
+		nums     []int
+		expected int
+	}{
+		{[]int{1, 2, 3}, 6},
+		{[]int{1, 2, 3, 4, 5}, 15},
+		{[]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 55},
+		{[]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, 120},
+		{[]int{}, 0},
+		{[]int{5}, 5},
+	}
+	for _, tt := range tests {
+		result := Sum(tt.nums...)
+		fmt.Printf("Sum(%v) = %v; want %v\n", tt.nums, result, tt.expected)
+		if result != tt.expected {
+			t.Errorf("Sum(%v) = %v; want %v", tt.nums, result, tt.expected)
+		}
+	}
 }

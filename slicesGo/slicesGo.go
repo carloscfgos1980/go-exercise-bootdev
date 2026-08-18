@@ -34,3 +34,12 @@ func GetMessageCosts(messages []string) []float64 {
 	}
 	return cost
 }
+
+// Variadic Functions
+func Sum(nums ...int) int {
+	var cost int
+	for i := 0; i < len(nums); i++ {
+		cost += nums[i]
+	}
+	return cost
+}
