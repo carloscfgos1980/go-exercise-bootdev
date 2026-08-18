@@ -2,6 +2,8 @@ package slicesgo
 
 import (
 	"fmt"
+	"math"
+	"reflect"
 	"testing"
 )
 
@@ -91,16 +93,49 @@ func TestGetMessageWithRetriesForPlan(t *testing.T) {
 
 }
 
-func equalSlices[T comparable](a, b []T) bool {
+func equalSlices[S ~[]E, E any](a, b S) bool {
 	if len(a) != len(b) {
 		return false
 	}
 	for i := range a {
-		if a[i] != b[i] {
+		if !equalValues(a[i], b[i]) {
 			return false
 		}
 	}
 	return true
+}
+
+func equalValues[T any](a, b T) bool {
+	return equalReflectValues(reflect.ValueOf(a), reflect.ValueOf(b))
+}
+
+func equalReflectValues(a, b reflect.Value) bool {
+	if !a.IsValid() || !b.IsValid() {
+		return !a.IsValid() && !b.IsValid()
+	}
+	if a.Kind() != b.Kind() {
+		return false
+	}
+	if a.Kind() == reflect.Slice {
+		if a.Len() != b.Len() {
+			return false
+		}
+		for i := 0; i < a.Len(); i++ {
+			if !equalReflectValues(a.Index(i), b.Index(i)) {
+				return false
+			}
+		}
+		return true
+	}
+	if a.Kind() == reflect.Float32 || a.Kind() == reflect.Float64 {
+		fa := a.Float()
+		fb := b.Float()
+		if math.IsNaN(fa) || math.IsNaN(fb) {
+			return false
+		}
+		return fa == fb
+	}
+	return reflect.DeepEqual(a.Interface(), b.Interface())
 }
 
 func equalErrors(a, b error) bool {
@@ -214,6 +249,40 @@ func TestIndexOfFirstBadWord(t *testing.T) {
 		fmt.Printf("IndexOfFirstBadWord(%v, %v) = %v; want %v\n", tt.msg, tt.badWords, result, tt.expected)
 		if result != tt.expected {
 			t.Errorf("IndexOfFirstBadWord(%v, %v) = %v; want %v", tt.msg, tt.badWords, result, tt.expected)
+		}
+	}
+}
+
+func TestCreateMatrix(t *testing.T) {
+	tests := []struct {
+		rows, cols int
+		expected   [][]int
+	}{
+		{3, 3, [][]int{
+			{0, 0, 0},
+			{0, 1, 2},
+			{0, 2, 4},
+		}},
+		{4, 4, [][]int{
+			{0, 0, 0, 0},
+			{0, 1, 2, 3},
+			{0, 2, 4, 6},
+			{0, 3, 6, 9},
+		}},
+		{5, 7, [][]int{
+			{0, 0, 0, 0, 0, 0, 0},
+			{0, 1, 2, 3, 4, 5, 6},
+			{0, 2, 4, 6, 8, 10, 12},
+			{0, 3, 6, 9, 12, 15, 18},
+			{0, 4, 8, 12, 16, 20, 24},
+		}},
+		{0, 0, [][]int{}},
+	}
+	for _, tt := range tests {
+		result := CreateMatrix(tt.rows, tt.cols)
+		fmt.Printf("CreateMatrix(%v, %v) = %v; want %v\n", tt.rows, tt.cols, result, tt.expected)
+		if !equalSlices(result, tt.expected) {
+			t.Errorf("CreateMatrix(%v, %v) = %v; want %v", tt.rows, tt.cols, result, tt.expected)
 		}
 	}
 }

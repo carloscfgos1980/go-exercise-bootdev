@@ -9,6 +9,7 @@ import (
 	"github.com/carloscfgos1980/go-exercise-bootdev/condictionals"
 	"github.com/carloscfgos1980/go-exercise-bootdev/functions"
 	"github.com/carloscfgos1980/go-exercise-bootdev/loopsGo"
+	"github.com/carloscfgos1980/go-exercise-bootdev/slicesgo"
 	"github.com/carloscfgos1980/go-exercise-bootdev/structs"
 )
 
@@ -142,6 +143,21 @@ func main() {
 			max := 0
 			fmt.Sscanf(os.Args[2], "%d", &max)
 			loopsGo.PrintPrimes(max)
+		},
+		"matrix": func() {
+			if len(os.Args) < 4 {
+				fmt.Printf("usage: go run . matrix <rows> <cols>\n")
+				return
+			}
+			rows := 0
+			cols := 0
+			fmt.Sscanf(os.Args[2], "%d", &rows)
+			fmt.Sscanf(os.Args[3], "%d", &cols)
+			matrix := slicesgo.CreateMatrix(rows, cols)
+			fmt.Println("Matrix:")
+			for _, row := range matrix {
+				fmt.Println(row)
+			}
 		},
 	}
 
