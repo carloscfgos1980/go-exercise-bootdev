@@ -286,3 +286,36 @@ func TestCreateMatrix(t *testing.T) {
 		}
 	}
 }
+
+func TestFilterMessages(t *testing.T) {
+	messages := []Message{
+		TextMessage{"Alice", "Hello, World!"},
+		MediaMessage{"Bob", "image", "A beautiful sunset"},
+		LinkMessage{"Charlie", "http://example.com", "Example Domain"},
+		TextMessage{"Dave", "Another text message"},
+		MediaMessage{"Eve", "video", "Cute cat video"},
+		LinkMessage{"Frank", "https://boot.dev", "Learn Coding Online"},
+	}
+	tests := []struct {
+		filterType    string
+		expectedCount int
+		expectedType  string
+	}{
+		{"text", 2, "text"},
+		{"media", 2, "media"},
+		{"link", 2, "link"},
+		{"unsupported", 0, "unsupported"},
+	}
+	for _, tt := range tests {
+		result := FilterMessages(messages, tt.filterType)
+		fmt.Printf("FilterMessages(%v, %v) = %v; want count %v and type %v\n", messages, tt.filterType, result, tt.expectedCount, tt.expectedType)
+		if len(result) != tt.expectedCount {
+			t.Errorf("FilterMessages(%v, %v) = %v; want count %v", messages, tt.filterType, result, tt.expectedCount)
+		}
+		for _, msg := range result {
+			if msg.Type() != tt.expectedType {
+				t.Errorf("FilterMessages(%v, %v) = %v; want type %v", messages, tt.filterType, result, tt.expectedType)
+			}
+		}
+	}
+}
