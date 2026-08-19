@@ -319,3 +319,24 @@ func TestFilterMessages(t *testing.T) {
 		}
 	}
 }
+
+func TestIsValidPassword(t *testing.T) {
+	tests := []struct {
+		password string
+		isValid  bool
+	}{
+		{"Pass123", true},
+		{"pas", false},
+		{"Password", false},
+		{"123456", false},
+		{"VeryLongPassword1", false},
+		{"AA0Z9", false},
+	}
+	for _, tt := range tests {
+		result := IsValidPassword(tt.password)
+		fmt.Printf("IsValidPassword(%v) = %v; want %v\n", tt.password, result, tt.isValid)
+		if result != tt.isValid {
+			t.Errorf("IsValidPassword(%v) = %v; want %v", tt.password, result, tt.isValid)
+		}
+	}
+}

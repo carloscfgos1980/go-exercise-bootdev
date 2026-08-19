@@ -129,3 +129,26 @@ func FilterMessages(messages []Message, filterType string) []Message {
 	}
 	return msgs
 }
+
+// Password strength checker
+
+func IsValidPassword(password string) bool {
+	if len(password) < 5 || len(password) > 12 {
+		return false
+	}
+	hasUpper := false
+	hasNumber := false
+	hasSmall := false
+	for _, char := range password {
+		if char >= 'A' && char <= 'Z' {
+			hasUpper = true
+		}
+		if char >= '0' && char <= '9' {
+			hasNumber = true
+		}
+		if char >= 'a' && char <= 'z' {
+			hasSmall = true
+		}
+	}
+	return hasUpper && hasNumber && hasSmall
+}
