@@ -340,3 +340,37 @@ func TestIsValidPassword(t *testing.T) {
 		}
 	}
 }
+
+func TestTagMessages(t *testing.T) {
+	tests := []struct {
+		messages []sms
+		expected [][]string
+	}{
+		{
+			messages: []sms{{id: "001", content: "Urgent, please respond!"}, {id: "002", content: "Big sale on all items!"}},
+			expected: [][]string{{"Urgent"}, {"Promo"}},
+		},
+		{
+			messages: []sms{{id: "003", content: "Enjoy your day"}},
+			expected: [][]string{{}},
+		},
+		{
+			messages: []sms{{id: "004", content: "Sale! Don't miss out on these urgent promotions!"}},
+			expected: [][]string{{"Urgent", "Promo"}},
+		},
+		{
+			messages: []sms{{id: "005", content: "i nEEd URgEnt help, my FROZEN FLAME was used"}, {id: "006", content: "wAnt to saLE 200x heavy leather"}},
+			expected: [][]string{{"Urgent"}, {"Promo"}},
+		},
+	}
+	for _, tt := range tests {
+		result := TagMessages(tt.messages, tagger)
+		fmt.Printf("TagMessages(%v) = %v; want %v\n", tt.messages, result, tt.expected)
+		for i, msg := range result {
+			if !equalSlices(msg.tags, tt.expected[i]) {
+				fmt.Println("Expected tags:", tt.expected[i], "but got:", msg.tags)
+				t.Errorf("TagMessages(%v) = %v; want %v", tt.messages, result, tt.expected)
+			}
+		}
+	}
+}

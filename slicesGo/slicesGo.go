@@ -1,6 +1,9 @@
 package slicesgo
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 // Array in Go
 func GetMessageWithRetries(primary, secondary, tertiary string) ([3]string, [3]int) {
@@ -131,7 +134,6 @@ func FilterMessages(messages []Message, filterType string) []Message {
 }
 
 // Password strength checker
-
 func IsValidPassword(password string) bool {
 	if len(password) < 5 || len(password) > 12 {
 		return false
@@ -151,4 +153,30 @@ func IsValidPassword(password string) bool {
 		}
 	}
 	return hasUpper && hasNumber && hasSmall
+}
+
+// Message tagger
+type sms struct {
+	id      string
+	content string
+	tags    []string
+}
+
+func TagMessages(messages []sms, tagger func(sms) []string) []sms {
+	for i, message := range messages {
+		messages[i].tags = tagger(message)
+	}
+	return messages
+}
+
+func tagger(msg sms) []string {
+	tags := make([]string, 0)
+	content := strings.ToLower(msg.content)
+	if strings.Contains(content, "urgent") {
+		tags = append(tags, "Urgent")
+	}
+	if strings.Contains(content, "sale") {
+		tags = append(tags, "Promo")
+	}
+	return tags
 }
