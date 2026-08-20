@@ -122,3 +122,41 @@ func TestDeleteIfNecessary(t *testing.T) {
 		}
 	}
 }
+
+func TestUpdateCounts(t *testing.T) {
+	tests := []struct {
+		messagedUsers []string
+		validUsers    map[string]int
+		expected      map[string]int
+	}{
+		{
+			[]string{"Eren", "Armin", "Mikasa", "Eren", "Mikasa"},
+			map[string]int{"Eren": 0, "Armin": 0, "Mikasa": 0},
+			map[string]int{"Eren": 2, "Armin": 1, "Mikasa": 2},
+		},
+		{
+			[]string{"Levi", "Erwin", "Hanji", "Levi", "Hanji"},
+			map[string]int{"Levi": 0, "Erwin": 0, "Hanji": 0},
+			map[string]int{"Levi": 2, "Erwin": 1, "Hanji": 2},
+		},
+	}
+	for _, tt := range tests {
+		UpdateCounts(tt.messagedUsers, tt.validUsers)
+		fmt.Printf("UpdateCounts(%v, %v) = %v; want %v\n", tt.messagedUsers, tt.validUsers, tt.validUsers, tt.expected)
+		if !equalIntMaps(tt.validUsers, tt.expected) {
+			t.Errorf("UpdateCounts(%v, %v) modified validUsers map incorrectly: got %v; want %v", tt.messagedUsers, tt.validUsers, tt.validUsers, tt.expected)
+		}
+	}
+}
+
+func equalIntMaps(a, b map[string]int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for k, v := range a {
+		if vb, ok := b[k]; !ok || vb != v {
+			return false
+		}
+	}
+	return true
+}

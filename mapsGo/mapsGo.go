@@ -41,3 +41,12 @@ type user2 struct {
 	number               int
 	scheduledForDeletion bool
 }
+
+// Count intances of a value in a map
+func UpdateCounts(messagedUsers []string, validUsers map[string]int) {
+	for _, user := range messagedUsers {
+		if _, ok := validUsers[user]; ok {
+			validUsers[user]++
+		}
+	}
+}
