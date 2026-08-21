@@ -50,3 +50,18 @@ func UpdateCounts(messagedUsers []string, validUsers map[string]int) {
 		}
 	}
 }
+
+// Nested Maps in Go
+func GetNameCounts(names []string) map[rune]map[string]int {
+	nameCounts := make(map[rune]map[string]int)
+	for _, name := range names {
+		runes := []rune(name)
+		firstLetter := runes[0]
+
+		if _, ok := nameCounts[firstLetter]; !ok {
+			nameCounts[firstLetter] = make(map[string]int)
+		}
+		nameCounts[firstLetter][name]++
+	}
+	return nameCounts
+}
