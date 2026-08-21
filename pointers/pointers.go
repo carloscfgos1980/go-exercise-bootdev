@@ -1,6 +1,7 @@
 package pointers
 
 import (
+	"errors"
 	"strings"
 )
 
@@ -42,4 +43,41 @@ func RemoveProfanitySafe(message *string) {
 	messageVal = strings.ReplaceAll(messageVal, "shiz", "****")
 	messageVal = strings.ReplaceAll(messageVal, "witch", "*****")
 	*message = messageVal
+}
+
+// Update Balance
+
+type customer struct {
+	id      int
+	balance float64
+}
+
+type transactionType string
+
+const (
+	transactionDeposit    transactionType = "deposit"
+	transactionWithdrawal transactionType = "withdrawal"
+)
+
+type transaction struct {
+	customerID      int
+	amount          float64
+	transactionType transactionType
+}
+
+func UpdateBalance(c *customer, t transaction) error {
+	switch t.transactionType {
+	case transactionDeposit:
+		c.balance += t.amount
+		return nil
+	case transactionWithdrawal:
+		if c.balance < t.amount {
+			return errors.New("insufficient funds")
+		} else {
+			c.balance -= t.amount
+			return nil
+		}
+	default:
+		return errors.New("unknown transaction type")
+	}
 }

@@ -101,3 +101,64 @@ func TestRemoveProfanitySafe(t *testing.T) {
 		})
 	}
 }
+
+func TestUpdateBalance(t *testing.T) {
+	tests := []struct {
+		name            string
+		initialCustomer customer
+		transaction     transaction
+		expectedBalance float64
+		expectError     bool
+		errorMessage    string
+	}{
+		{
+			name:            "Deposit operation",
+			initialCustomer: customer{id: 1, balance: 100.0},
+			transaction:     transaction{customerID: 1, amount: 50.0, transactionType: transactionDeposit},
+			expectedBalance: 150.0,
+			expectError:     false,
+		},
+		{
+			name:            "Withdrawal operation",
+			initialCustomer: customer{id: 2, balance: 200.0},
+			transaction:     transaction{customerID: 2, amount: 100.0, transactionType: transactionWithdrawal},
+			expectedBalance: 100.0,
+			expectError:     false,
+		},
+		{
+			name:            "insufficient funds for withdrawal",
+			initialCustomer: customer{id: 3, balance: 50.0},
+			transaction:     transaction{customerID: 3, amount: 100.0, transactionType: transactionWithdrawal},
+			expectedBalance: 50.0,
+			expectError:     true,
+			errorMessage:    "insufficient funds",
+		},
+		{
+			name:            "unknown transaction type",
+			initialCustomer: customer{id: 4, balance: 100.0},
+			transaction:     transaction{customerID: 4, amount: 50.0, transactionType: "unknown"},
+			expectedBalance: 100.0,
+			expectError:     true,
+			errorMessage:    "unknown transaction type",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := UpdateBalance(&tt.initialCustomer, tt.transaction)
+			if tt.expectError {
+				if err == nil {
+					t.Errorf("expected error %q, got nil", tt.errorMessage)
+				} else if err.Error() != tt.errorMessage {
+					t.Errorf("expected error %q, got %q", tt.errorMessage, err.Error())
+				}
+			} else {
+				if err != nil {
+					t.Errorf("unexpected error: %v", err)
+				}
+				if tt.initialCustomer.balance != tt.expectedBalance {
+					t.Errorf("expected balance %v, got %v", tt.expectedBalance, tt.initialCustomer.balance)
+				}
+			}
+		})
+	}
+}
