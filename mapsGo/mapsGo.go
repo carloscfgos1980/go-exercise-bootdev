@@ -1,6 +1,9 @@
 package mapsgo
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 // Maps in Go
 func GetUserMap(names []string, phoneNumbers []int) (map[string]user, error) {
@@ -64,4 +67,17 @@ func GetNameCounts(names []string) map[rune]map[string]int {
 		nameCounts[firstLetter][name]++
 	}
 	return nameCounts
+}
+
+// Distinct words
+func CountDistinctWords(messages []string) int {
+	distinctWordsStruct := make(map[string]struct{})
+	for _, msg := range messages {
+		for _, word := range strings.Fields(strings.ToLower(msg)) {
+			if _, ok := distinctWordsStruct[word]; !ok {
+				distinctWordsStruct[word] = struct{}{}
+			}
+		}
+	}
+	return len(distinctWordsStruct)
 }

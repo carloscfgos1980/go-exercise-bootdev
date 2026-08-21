@@ -231,3 +231,58 @@ func getNames(length int) []string {
 		"Kai", "Khalil", "Khalil", "Khalil", "Graham", "Noel", "Willie", "Nathanael", "Terrell",
 	}[:length]
 }
+
+func TestCountDistinctWords(t *testing.T) {
+	tests := []struct {
+		messages []string
+		expected int
+	}{
+		{
+			[]string{"WTS Arcanite Bar! Cheaper than AH", "Do you need an Arcanite Bar!"},
+			10,
+		},
+		{
+			[]string{"Could you give me a number crunch real quick?", "Looks like we have a 32.33% (repeating of course) percentage of survival."},
+			19,
+		},
+		{
+			[]string{"LFG UBRS", "lfg ubrs", "LFG Ubrs"},
+			2,
+		},
+		{
+			[]string{"Alright time's up! Let's do this.", "Leroy Jenkins!", "Damn it Leroy"},
+			10,
+		},
+		{
+			[]string{"I'm out of range", "I'm out of mana"},
+			5,
+		},
+		{
+			[]string{
+				"LF9M UBRS need all",
+				"LF8M UBRS need all",
+				"LF7M UBRS need all",
+				"LF6M UBRS need tanks and heals",
+				"LF5M UBRS need tanks and heals",
+				"LF4M UBRS need tanks and heals",
+				"LF3M UBRS need tanks and healer",
+				"LF2M UBRS need tanks",
+				"LF1M UBRS need tank",
+				"Group is full thanks!",
+			},
+			21,
+		},
+		{
+			[]string{""},
+			0,
+		},
+	}
+
+	for _, tt := range tests {
+		result := CountDistinctWords(tt.messages)
+		fmt.Printf("CountDistinctWords(%v) = %d; want %d\n", tt.messages, result, tt.expected)
+		if result != tt.expected {
+			t.Errorf("CountDistinctWords(%v) = %d; want %d", tt.messages, result, tt.expected)
+		}
+	}
+}
