@@ -57,8 +57,6 @@ func WaitForDBs(numDBs int, dbChan chan struct{}) {
 	}
 }
 
-// don't touch below this line
-
 func getDBsChannel(numDBs int) (chan struct{}, *int) {
 	count := 0
 	ch := make(chan struct{})
@@ -72,4 +70,13 @@ func getDBsChannel(numDBs int) (chan struct{}, *int) {
 	}()
 
 	return ch, &count
+}
+
+// Add emails to a queue and process them concurrently. This is a common pattern in Go to handle multiple tasks concurrently and efficiently.
+func AddEmailsToQueue(emails []string) chan string {
+	emailsToSend := make(chan string, len(emails))
+	for _, email := range emails {
+		emailsToSend <- email
+	}
+	return emailsToSend
 }

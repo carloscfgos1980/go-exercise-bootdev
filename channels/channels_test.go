@@ -81,3 +81,20 @@ func TestWaitForDBs(t *testing.T) {
 		}
 	}
 }
+
+func TestAddEmailsToQueue(t *testing.T) {
+	tests := []struct {
+		emails   []string
+		expected int
+	}{
+		{emails: []string{"a@example.com", "b@example.com"}, expected: 2},
+		{emails: []string{"c@example.com"}, expected: 1},
+		{emails: []string{}, expected: 0},
+	}
+	for _, tt := range tests {
+		got := len(AddEmailsToQueue(tt.emails))
+		if got != tt.expected {
+			t.Errorf("AddEmailsToQueue(%v) = %d; want %d", tt.emails, got, tt.expected)
+		}
+	}
+}
