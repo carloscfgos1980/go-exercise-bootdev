@@ -64,3 +64,20 @@ func TestCheckEmailAge(t *testing.T) {
 		}
 	}
 }
+
+func TestWaitForDBs(t *testing.T) {
+	tests := []struct {
+		numDBs int
+	}{
+		{numDBs: 3},
+		{numDBs: 5},
+		{numDBs: 10},
+	}
+	for _, tt := range tests {
+		dbChan, countPtr := getDBsChannel(tt.numDBs)
+		WaitForDBs(tt.numDBs, dbChan)
+		if len(dbChan) != 0 && *countPtr != tt.numDBs {
+			t.Errorf("WaitForDBs(%d) = %d; want %d. Len(dbChan) = %d", tt.numDBs, *countPtr, tt.numDBs, len(dbChan))
+		}
+	}
+}

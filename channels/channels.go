@@ -49,3 +49,27 @@ func sendIsOld(isOldChan chan<- bool, emails [3]email) {
 		isOldChan <- false
 	}
 }
+
+// Pass empty channel to block the main goroutine until the other goroutine finishes its work. This is a common pattern in Go to synchronize goroutines and ensure that the main function doesn't exit before the other goroutines complete their tasks.
+func WaitForDBs(numDBs int, dbChan chan struct{}) {
+	for i := 0; i < numDBs; i++ {
+		<-dbChan
+	}
+}
+
+// don't touch below this line
+
+func getDBsChannel(numDBs int) (chan struct{}, *int) {
+	count := 0
+	ch := make(chan struct{})
+
+	go func() {
+		for i := 0; i < numDBs; i++ {
+			ch <- struct{}{}
+			fmt.Printf("Database %v is online\n", i+1)
+			count++
+		}
+	}()
+
+	return ch, &count
+}
