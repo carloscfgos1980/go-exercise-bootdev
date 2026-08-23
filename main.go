@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/carloscfgos1980/go-exercise-bootdev/channels"
 	"github.com/carloscfgos1980/go-exercise-bootdev/condictionals"
 	"github.com/carloscfgos1980/go-exercise-bootdev/functions"
 	"github.com/carloscfgos1980/go-exercise-bootdev/loopsGo"
@@ -135,6 +136,9 @@ func main() {
 			}
 		},
 		"fizzbuzz": loopsGo.Fizzbuzz,
+		"send-msg": func() {
+			channels.Test("Hello from send-msg")
+		},
 		"print-primes": func() {
 			if len(os.Args) < 3 {
 				fmt.Printf("usage: go run . print-primes <max>\n")
@@ -158,6 +162,11 @@ func main() {
 			for _, row := range matrix {
 				fmt.Println(row)
 			}
+		},
+		"message": func() {
+			channels.Test("Hello there Kaladin!")
+			channels.Test("Hi there Shallan!")
+			channels.Test("Hey there Dalinar!")
 		},
 	}
 
