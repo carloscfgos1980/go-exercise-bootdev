@@ -98,3 +98,24 @@ func TestAddEmailsToQueue(t *testing.T) {
 		}
 	}
 }
+
+func TestCountReports(t *testing.T) {
+	tests := []struct {
+		numBatches int
+		expected   int
+	}{
+		{3, 114},
+		{4, 198},
+		{0, 0},
+		{1, 15},
+		{6, 435},
+	}
+	for _, tt := range tests {
+		numSentCh := make(chan int)
+		go sendReports(tt.numBatches, numSentCh)
+		output := CountReports(numSentCh)
+		if output != tt.expected {
+			t.Errorf("CountReports(%d) = %d; want %d", tt.numBatches, output, tt.expected)
+		}
+	}
+}

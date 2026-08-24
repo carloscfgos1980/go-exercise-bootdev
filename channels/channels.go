@@ -80,3 +80,24 @@ func AddEmailsToQueue(emails []string) chan string {
 	}
 	return emailsToSend
 }
+
+// Closing channles in GO is important to signal that no more values will be sent on the channel. This allows the receiving goroutine to know when to stop waiting for new values and exit gracefully. In this example, we will demonstrate how to close a channel after sending all the emails in the queue.
+func CountReports(numSentCh chan int) int {
+	total := 0
+	for {
+		numSent, ok := <-numSentCh
+		if !ok {
+			break
+		}
+		total += numSent
+	}
+	return total
+}
+
+func sendReports(numBatches int, ch chan int) {
+	for i := 0; i < numBatches; i++ {
+		numReports := i*23 + 32%17
+		ch <- numReports
+	}
+	close(ch)
+}
