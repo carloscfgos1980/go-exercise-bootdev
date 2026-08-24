@@ -119,3 +119,35 @@ func TestCountReports(t *testing.T) {
 		}
 	}
 }
+
+func TestConcurrentFib(t *testing.T) {
+	tests := []struct {
+		n        int
+		expected []int
+	}{
+		{5, []int{0, 1, 1, 2, 3}},
+		{3, []int{0, 1, 1}},
+		{0, []int{}},
+		{1, []int{0}},
+		{7, []int{0, 1, 1, 2, 3, 5, 8}},
+	}
+	for _, tt := range tests {
+		got := ConcurrentFib(tt.n)
+		if !equalSlices(got, tt.expected) {
+			t.Errorf("ConcurrentFib(%d) = %v; want %v", tt.n, got, tt.expected)
+		}
+	}
+
+}
+
+func equalSlices(a, b []int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}

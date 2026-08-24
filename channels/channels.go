@@ -101,3 +101,26 @@ func sendReports(numBatches int, ch chan int) {
 	}
 	close(ch)
 }
+
+// Range. Finobacci exercise. This is a common pattern in Go to iterate over a channel and process the values received from it.
+
+func ConcurrentFib(n int) []int {
+	ch := make(chan int)
+	go fibonacci(n, ch)
+	nums := make([]int, 0)
+	for num := range ch {
+		nums = append(nums, num)
+	}
+	return nums
+}
+
+// don't touch below this line
+
+func fibonacci(n int, ch chan int) {
+	x, y := 0, 1
+	for i := 0; i < n; i++ {
+		ch <- x
+		x, y = y, x+y
+	}
+	close(ch)
+}
