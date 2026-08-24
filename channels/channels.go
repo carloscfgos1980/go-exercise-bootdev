@@ -189,3 +189,76 @@ func sendToLogger(sms, emails []string) (chSms, chEmails chan string) {
 	}()
 	return chSms, chEmails
 }
+
+// Select default case exercise.
+func SaveBackups(snapshotTicker, saveAfter <-chan time.Time, logChan chan string) {
+	for {
+		select {
+		case <-snapshotTicker:
+			takeSnapshot(logChan)
+		case <-saveAfter:
+			saveSnapshot(logChan)
+			return
+		default:
+			waitForData(logChan)
+			time.Sleep(500 * time.Millisecond)
+		}
+	}
+}
+
+func takeSnapshot(logChan chan string) {
+	logChan <- "Taking a backup snapshot..."
+}
+
+func saveSnapshot(logChan chan string) {
+	logChan <- "All backups saved!"
+	close(logChan)
+}
+
+func waitForData(logChan chan string) {
+	logChan <- "Nothing to do, waiting..."
+}
+
+// Exercise: Ping Pong
+func pingPong(numPings int) {
+	pings := make(chan struct{})
+	pongs := make(chan struct{})
+	go ponger(pings, pongs)
+	go pinger(pings, numPings)
+	func() {
+		i := 0
+		for range pongs {
+			fmt.Println("got pong", i)
+			i++
+		}
+		fmt.Println("pongs done")
+	}()
+}
+
+func pinger(pings chan struct{}, numPings int) {
+	sleepTime := 50 * time.Millisecond
+	for i := 0; i < numPings; i++ {
+		fmt.Printf("sending ping %v\n", i)
+		pings <- struct{}{}
+		time.Sleep(sleepTime)
+		sleepTime *= 2
+	}
+	close(pings)
+}
+
+func ponger(pings, pongs chan struct{}) {
+	i := 0
+	for range pings {
+		fmt.Printf("got ping %v, sending pong %v\n", i, i)
+		pongs <- struct{}{}
+		i++
+	}
+	fmt.Println("pings done")
+	close(pongs)
+}
+
+func TestPingPong(numPings int) {
+	fmt.Println("Starting game...")
+	pingPong(numPings)
+	fmt.Println("===== Game over =====")
+}

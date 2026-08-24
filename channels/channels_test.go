@@ -151,3 +151,50 @@ func equalSlices(a, b []int) bool {
 	}
 	return true
 }
+
+func TestSaveBackups(t *testing.T) {
+	tests := []struct {
+		expectedLogs []string
+	}{
+		{
+			expectedLogs: []string{
+				"Nothing to do, waiting...",
+				"Nothing to do, waiting...",
+				"Nothing to do, waiting...",
+				"Taking a backup snapshot...",
+				"Nothing to do, waiting...",
+				"Nothing to do, waiting...",
+				"Nothing to do, waiting...",
+				"Taking a backup snapshot...",
+				"Nothing to do, waiting...",
+				"All backups saved!",
+			},
+		},
+	}
+	for _, tt := range tests {
+		snapshotTicker := time.Tick(1500 * time.Millisecond)
+		saveAfter := time.After(3500 * time.Millisecond)
+		logChan := make(chan string)
+		go SaveBackups(snapshotTicker, saveAfter, logChan)
+		var logs []string
+		for log := range logChan {
+			fmt.Println(log)
+			logs = append(logs, log)
+		}
+		if !equalSlicesString(logs, tt.expectedLogs) {
+			t.Errorf("SaveBackups() logs = %v; want %v", logs, tt.expectedLogs)
+		}
+	}
+}
+
+func equalSlicesString(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}

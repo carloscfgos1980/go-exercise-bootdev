@@ -173,6 +173,15 @@ func main() {
 			emails := []string{"alice@example.com", "bob@example.com", "carol@example.com"}
 			channels.TestChannels(sms, emails)
 		},
+		"test-pingpong": func() {
+			if len(os.Args) < 3 {
+				fmt.Printf("usage: go run . test-pingpong <numPings>\n")
+				return
+			}
+			numPings := 0
+			fmt.Sscanf(os.Args[2], "%d", &numPings)
+			channels.TestPingPong(numPings)
+		},
 	}
 
 	if len(os.Args) < 2 {
