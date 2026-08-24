@@ -168,6 +168,11 @@ func main() {
 			channels.Test("Hi there Shallan!")
 			channels.Test("Hey there Dalinar!")
 		},
+		"test-channels": func() {
+			sms := []string{"Hello", "How are you?", "Goodbye"}
+			emails := []string{"alice@example.com", "bob@example.com", "carol@example.com"}
+			channels.TestChannels(sms, emails)
+		},
 	}
 
 	if len(os.Args) < 2 {
