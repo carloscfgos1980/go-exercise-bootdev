@@ -19,7 +19,7 @@ func TestSafeCounter(t *testing.T) {
 	for _, tt := range tests {
 		sc := safeCounter{
 			counts: make(map[string]int),
-			mu:     &sync.Mutex{},
+			mu:     &sync.RWMutex{},
 		}
 		var wg sync.WaitGroup
 		for i := 0; i < tt.count; i++ {

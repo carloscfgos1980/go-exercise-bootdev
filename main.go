@@ -10,6 +10,7 @@ import (
 	"github.com/carloscfgos1980/go-exercise-bootdev/condictionals"
 	"github.com/carloscfgos1980/go-exercise-bootdev/functions"
 	"github.com/carloscfgos1980/go-exercise-bootdev/loopsGo"
+	"github.com/carloscfgos1980/go-exercise-bootdev/mutexes"
 	"github.com/carloscfgos1980/go-exercise-bootdev/slicesgo"
 	"github.com/carloscfgos1980/go-exercise-bootdev/structs"
 )
@@ -182,6 +183,7 @@ func main() {
 			fmt.Sscanf(os.Args[2], "%d", &numPings)
 			channels.TestPingPong(numPings)
 		},
+		"mutexes-usage": mutexes.MutexesUsage,
 	}
 
 	if len(os.Args) < 2 {
