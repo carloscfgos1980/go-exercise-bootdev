@@ -136,3 +136,50 @@ func equalLineItems(a, b []lineItem) bool {
 	}
 	return true
 }
+
+func TestOrgBilling(t *testing.T) {
+	tests := []struct {
+		biller         orgBiller
+		customer       org
+		expectedAmount float64
+		expectedEmail  string
+	}{
+		{
+			biller: orgBiller{Plan: "pro"},
+			customer: org{
+				Admin: user{UserEmail: "jaskier@oxenfurt.com"},
+				Name:  "Oxenfurt",
+			},
+			expectedAmount: 3000,
+			expectedEmail:  "jaskier@oxenfurt.com",
+		},
+		{
+			biller: orgBiller{Plan: "basic"},
+			customer: org{
+				Admin: user{UserEmail: "vernon@temeria.com"},
+				Name:  "Temeria",
+			},
+			expectedAmount: 2000,
+			expectedEmail:  "vernon@temeria.com",
+		},
+		{
+			biller: orgBiller{Plan: "pro"},
+			customer: org{
+				Admin: user{UserEmail: "fringilla@nilfgaard.com"},
+				Name:  "Nilfgaard",
+			},
+			expectedAmount: 3000,
+			expectedEmail:  "fringilla@nilfgaard.com",
+		},
+	}
+	for _, tt := range tests {
+		gotBill := tt.biller.Charge(tt.customer)
+		fmt.Printf("Charging %s for org %s: Amount = %.2f, Email = %s\n", tt.biller.Name(), tt.customer.Name, gotBill.Amount, gotBill.Customer.GetBillingEmail())
+		if gotBill.Amount != tt.expectedAmount {
+			t.Errorf("Charge() got Amount = %v; want %v", gotBill.Amount, tt.expectedAmount)
+		}
+		if gotBill.Customer.GetBillingEmail() != tt.expectedEmail {
+			t.Errorf("Charge() got Email = %v; want %v", gotBill.Customer.GetBillingEmail(), tt.expectedEmail)
+		}
+	}
+}
