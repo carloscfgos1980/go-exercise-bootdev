@@ -70,3 +70,24 @@ func TestHandleEmailBounce(t *testing.T) {
 		}
 	}
 }
+
+func TestGetEmailStatusName(t *testing.T) {
+	tests := []struct {
+		status   emailStatus
+		expected string
+	}{
+		{EmailBounced, "EmailBounced"},
+		{EmailInvalid, "EmailInvalid"},
+		{EmailDelivered, "EmailDelivered"},
+		{EmailOpened, "EmailOpened"},
+		{17, "Unknown"},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("status=%v", tt.status), func(t *testing.T) {
+			got := getEmailStatusName(tt.status)
+			if got != tt.expected {
+				t.Errorf("getEmailStatusName() = %v, want %v", got, tt.expected)
+			}
+		})
+	}
+}
