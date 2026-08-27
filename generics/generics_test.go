@@ -183,3 +183,41 @@ func TestOrgBilling(t *testing.T) {
 		}
 	}
 }
+
+func TestUserBilling(t *testing.T) {
+	tests := []struct {
+		biller         userBiller
+		customer       user
+		expectedAmount float64
+		expectedEmail  string
+	}{
+		{
+			biller:         userBiller{Plan: "basic"},
+			customer:       user{UserEmail: "vesemir@kaermorhen.com"},
+			expectedAmount: 50,
+			expectedEmail:  "vesemir@kaermorhen.com",
+		},
+		{
+			biller:         userBiller{Plan: "pro"},
+			customer:       user{UserEmail: "zoltan@mahakam.com"},
+			expectedAmount: 100,
+			expectedEmail:  "zoltan@mahakam.com",
+		},
+		{
+			biller:         userBiller{Plan: "pro"},
+			customer:       user{UserEmail: "extra@submit.com"},
+			expectedAmount: 100,
+			expectedEmail:  "extra@submit.com",
+		},
+	}
+	for _, tt := range tests {
+		gotBill := tt.biller.Charge(tt.customer)
+		fmt.Printf("Charging %s for user %s: Amount = %.2f, Email = %s\n", tt.biller.Name(), tt.customer.UserEmail, gotBill.Amount, gotBill.Customer.GetBillingEmail())
+		if gotBill.Amount != tt.expectedAmount {
+			t.Errorf("Charge() got Amount = %v; want %v", gotBill.Amount, tt.expectedAmount)
+		}
+		if gotBill.Customer.GetBillingEmail() != tt.expectedEmail {
+			t.Errorf("Charge() got Email = %v; want %v", gotBill.Customer.GetBillingEmail(), tt.expectedEmail)
+		}
+	}
+}
