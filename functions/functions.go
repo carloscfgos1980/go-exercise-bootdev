@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// using unit testing to validate the functions
+// 2. using unit testing to validate the functions
 func GetMonthlyPrice(tier string) int {
 	switch tier {
 	case "basic":
@@ -19,7 +19,7 @@ func GetMonthlyPrice(tier string) int {
 	}
 }
 
-// Passing variable per value
+// 3. Passing variable per value
 func MonthlyBillIncrease(costPerSend, numLastMonth, numThisMonth int) int {
 	var lastMonthBill int
 	var thisMonthBill int
@@ -32,7 +32,7 @@ func getBillForMonth(costPerSend, messagesSent int) int {
 	return costPerSend * messagesSent
 }
 
-// Ignoring return values
+// 4. Ignoring return values
 func GetProductMessage(tier string) string {
 	quantityMsg, priceMsg, _ := getProductInfo(tier)
 	return "You get " + quantityMsg + " for " + priceMsg + "."
@@ -51,7 +51,7 @@ func getProductInfo(tier string) (string, string, string) {
 	}
 }
 
-// Named return values
+// 5. Named return values
 func YearsUntilEvents(age int) (yearsUntilAdult, yearsUntilDrinking, yearsUntilCarRental int) {
 	// don't touch below this line
 
@@ -70,7 +70,7 @@ func YearsUntilEvents(age int) (yearsUntilAdult, yearsUntilDrinking, yearsUntilC
 	return
 }
 
-// Explicit return values
+// 6. Explicit return values
 func YearsUntilEvents2(age int) (yearsUntilAdult, yearsUntilDrinking, yearsUntilCarRental int) {
 	yearsUntilAdult = 18 - age
 	if yearsUntilAdult < 0 {
@@ -87,7 +87,7 @@ func YearsUntilEvents2(age int) (yearsUntilAdult, yearsUntilDrinking, yearsUntil
 	return yearsUntilAdult, yearsUntilDrinking, yearsUntilCarRental
 }
 
-// functions as values
+// 7. functions as values
 func Reformat(message string, formatter func(string) string) string {
 	once := formatter(message)
 	twice := formatter(once)
@@ -96,7 +96,7 @@ func Reformat(message string, formatter func(string) string) string {
 	return prefix + thrice
 }
 
-// Anonymous functions
+// 8. Anonymous functions
 func PrintReports(intro, body, outro string) {
 	printCostReport(func(intro string) int {
 		return len(intro) * 2
@@ -115,7 +115,7 @@ func printCostReport(costCalculator func(string) int, message string) {
 	fmt.Println()
 }
 
-// Defer statement
+// 9. Defer statement
 func Bootup() {
 	defer fmt.Println("TEXTIO BOOTUP DONE")
 	ok := connectToDB()
@@ -153,7 +153,7 @@ func connectToPaymentProvider() bool {
 	return false
 }
 
-// Block scope
+// 10. Block scope. Getting a variable from an outer scope and using it in an inner scope.
 func SplitEmail(email string) (string, string) {
 	username, domain := "", ""
 
