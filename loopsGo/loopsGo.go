@@ -56,6 +56,7 @@ func PrintPrimes(max int) {
 		}
 
 		isPrime := true
+		// Check divisibility by odd numbers starting from 3 up to the square root of n
 		for i := 3; i*i <= n; i += 2 {
 			if n%i == 0 {
 				isPrime = false
